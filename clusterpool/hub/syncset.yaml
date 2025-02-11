@@ -1,0 +1,15 @@
+apiVersion: hive.openshift.io/v1
+kind: SelectorSyncSet
+metadata:
+  name: skupper-token-sync
+spec:
+  clusterDeploymentSelector:
+    matchLabels:
+      cluster.open-cluster-management.io/clusterset: interconnect
+  secretMappings:
+    - sourceRef:
+        name: token-req
+        namespace: interconnect
+      targetRef:
+        name: token-req
+        namespace: interconnect

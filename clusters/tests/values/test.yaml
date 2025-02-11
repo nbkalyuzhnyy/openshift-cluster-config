@@ -1,0 +1,19 @@
+projects:
+  - name: test1
+    managedBy: test-cicd
+    group: app-owners
+  - name: test2
+    group: app-owners
+    quotas:
+      pods: '20'
+      cpuRequest: '4'
+      memoryRequest: 4Gi
+      cpuLimit: '20'
+      memoryLimit: 20Gi
+    default:
+      limits:
+        cpu: 1500m
+        memory: 1512Mi
+      requests:
+        cpu: 1250m
+        memory: 1256Mi

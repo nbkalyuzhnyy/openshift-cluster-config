@@ -1,0 +1,56 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: clusterpool
+  namespace: openshift-gitops
+spec:
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  destinations:
+    - name: '*'
+      namespace: '*'
+      server: '*'
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  sourceRepos:
+    - '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-pool-init
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  generators:
+    - clusterDecisionResource:
+        configMapRef: acm-placement
+        labelSelector:
+          matchLabels:
+            cluster.open-cluster-management.io/placement: interconnect
+        requeueAfterSeconds: 180
+  template:
+    metadata:
+      name: 'cluster-pool-init-{{name}}'
+    spec:
+      ignoreDifferences:
+        - group: apps
+          kind: Deployment
+          jsonPointers:
+            - /spec/replicas
+      destination:
+        server: '{{server}}'
+        namespace: interconnect
+      project: clusterpool
+      source:
+        path: clusterpool/managed
+        repoURL: 'https://github.com/piomin/openshift-cluster-config.git'
+        targetRevision: master
+      syncPolicy:
+#        automated:
+#          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

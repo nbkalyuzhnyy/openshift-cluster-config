@@ -1,0 +1,9 @@
+projects:
+  - name: pminkows-prod
+    group: app-owners
+    quotas:
+      pods: '8'
+      memoryRequest: 4Gi
+      memoryLimit: 10Gi
+cicdOwner: false
+addUsers: false
