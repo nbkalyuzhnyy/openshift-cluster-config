@@ -1,0 +1,16 @@
+broker:
+  topicsAutoCreation: false
+  nodes: 3
+  metricsEnabled: true
+  volumeSize: 50Gi
+  replication: 3
+  minInSync: 2
+
+topics:
+  - name: test-1
+    replicas: 3
+  - name: test-2
+    replicas: 3
+  - name: test-3
+    retention: 360000
+    replicas: 3

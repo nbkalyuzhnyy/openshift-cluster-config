@@ -1,0 +1,10 @@
+clusterName: aws-1
+baseDomain: openshiftcorp.click
+region: us-east-1
+provider: Amazon
+workerType: m5.xlarge
+workerReplicas: 3
+managedSet: demo-global
+version: 4.12.25
+autoscaling: false
+autoscalingTarget: 7

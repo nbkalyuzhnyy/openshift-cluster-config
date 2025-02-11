@@ -1,0 +1,30 @@
+apiVersion: hive.openshift.io/v1
+kind: MachinePool
+metadata:
+  name: {{ .Values.clusterName }}-worker
+  namespace: {{ .Values.clusterName }}
+spec:
+  {{- if eq .Values.autoscaling true }}
+  autoscaling:
+    maxReplicas: {{ .Values.autoscalingTarget }}
+    minReplicas: 3
+  {{- end }}
+  {{- if eq .Values.autoscaling false }}
+  replicas: {{ .Values.workerReplicas }}
+  {{- end }}
+  clusterDeploymentRef:
+    name: {{ .Values.clusterName }}
+  name: worker
+  platform:
+    {{- if eq .Values.provider "Amazon" }}
+    aws:
+      rootVolume:
+        iops: 2000
+        size: 100
+        type: io1
+      type: {{ .Values.workerType }}
+    {{- end }}
+    {{- if eq .Values.provider "Google" }}
+    gcp:
+      type: {{ .Values.workerType }}
+    {{- end }}
